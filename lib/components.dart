@@ -6,33 +6,45 @@ class RoundedButton extends StatelessWidget {
     super.key,
     required this.title,
     required this.onPressed,
-    this.color,
+    this.gradient,
+    this.isLoading = false,
   });
 
-  final Color? color;
   final String title;
   final VoidCallback onPressed;
+  final Gradient? gradient;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       decoration: BoxDecoration(
-        gradient: kPrimaryGradient,
-        borderRadius: BorderRadius.circular(20.0),
+        gradient: gradient ?? kPrimaryGradient,
+        borderRadius: BorderRadius.circular(kDefaultRadius),
         boxShadow: kModernShadow,
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: onPressed,
-          borderRadius: BorderRadius.circular(20.0),
+          onTap: isLoading ? null : onPressed,
+          borderRadius: BorderRadius.circular(kDefaultRadius),
           child: Container(
-            constraints: const BoxConstraints(minHeight: 60.0),
+            constraints: const BoxConstraints(minHeight: 56.0),
             alignment: Alignment.center,
-            child: Text(
-              title,
-              style: kButtonTextStyle,
-            ),
+            child: isLoading
+                ? const SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2.5,
+                    ),
+                  )
+                : Text(
+                    title,
+                    style: kButtonTextStyle,
+                  ),
           ),
         ),
       ),
@@ -45,56 +57,87 @@ class OutlinedRoundedButton extends StatelessWidget {
     super.key,
     required this.title,
     required this.onPressed,
+    this.color,
   });
 
   final String title;
   final VoidCallback onPressed;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
-        side: const BorderSide(color: kPrimaryColor, width: 2),
+        side: BorderSide(color: color ?? kPrimaryColor, width: 1.5),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(kDefaultRadius),
         ),
-        minimumSize: const Size(double.infinity, 60),
+        minimumSize: const Size(double.infinity, 56),
+        padding: const EdgeInsets.symmetric(vertical: 16),
       ),
       child: Text(
         title,
-        style: kButtonTextStyle.copyWith(color: kPrimaryColor),
+        style: kButtonTextStyle.copyWith(color: color ?? kPrimaryColor),
+      ),
+    );
+  }
+}
+
+class ModernCard extends StatelessWidget {
+  final Widget child;
+  final EdgeInsetsGeometry? padding;
+  final VoidCallback? onTap;
+
+  const ModernCard({
+    super.key,
+    required this.child,
+    this.padding,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: kSurfaceColor,
+        borderRadius: BorderRadius.circular(kDefaultRadius),
+        boxShadow: kSoftShadow,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(kDefaultRadius),
+          child: Padding(
+            padding: padding ?? const EdgeInsets.all(kDefaultPadding),
+            child: child,
+          ),
+        ),
       ),
     );
   }
 }
 
 class ModernBackgroundPainter extends CustomPainter {
+  const ModernBackgroundPainter();
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..style = PaintingStyle.fill;
     
-    // Top-left organic shape
-    paint.color = kPrimaryColor.withOpacity(0.06);
-    var path1 = Path();
-    path1.moveTo(0, size.height * 0.2);
-    path1.quadraticBezierTo(size.width * 0.3, size.height * 0.3, size.width * 0.4, 0);
-    path1.lineTo(0, 0);
-    path1.close();
-    canvas.drawPath(path1, paint);
+    // Top-left soft gradient blob
+    paint.color = kPrimaryColor.withValues(alpha: 0.05);
+    canvas.drawCircle(Offset(size.width * 0.1, size.height * 0.1), size.width * 0.4, paint);
 
-    // Bottom-right organic shape
-    paint.color = kAccentColor.withOpacity(0.04);
-    var path2 = Path();
-    path2.moveTo(size.width, size.height * 0.7);
-    path2.quadraticBezierTo(size.width * 0.6, size.height * 0.8, size.width * 0.5, size.height);
-    path2.lineTo(size.width, size.height);
-    path2.close();
-    canvas.drawPath(path2, paint);
+    // Bottom-right soft gradient blob
+    paint.color = kAccentColor.withValues(alpha: 0.04);
+    canvas.drawCircle(Offset(size.width * 0.9, size.height * 0.9), size.width * 0.5, paint);
 
-    // Soft glow circle
-    paint.color = kPrimaryColor.withOpacity(0.03);
-    canvas.drawCircle(Offset(size.width * 0.8, size.height * 0.3), size.width * 0.4, paint);
+    // Subtle floating circle
+    paint.color = kPrimaryColor.withValues(alpha: 0.02);
+    canvas.drawCircle(Offset(size.width * 0.8, size.height * 0.2), size.width * 0.2, paint);
   }
 
   @override

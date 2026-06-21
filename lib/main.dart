@@ -6,17 +6,17 @@ import 'home_screen.dart';
 import 'constants.dart';
 
 void main() {
-  runApp(const SmartChat());
+  runApp(const XemOttahApp());
 }
 
-class SmartChat extends StatelessWidget {
-  const SmartChat({super.key});
+class XemOttahApp extends StatelessWidget {
+  const XemOttahApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Smart Chat',
+      title: 'XemOttah',
       theme: ThemeData(
         useMaterial3: true,
         primaryColor: kPrimaryColor,

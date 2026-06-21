@@ -1,4 +1,4 @@
-name: smart_chatting_application
+name: xem_ottah
 description: "A new Flutter project."
 publish_to: 'none'
 version: 1.0.0+1
@@ -10,13 +10,19 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  image_picker: ^1.0.7 # For pictures and videos
-  file_picker: ^6.1.1   # For documents and audio
+  image_picker: ^1.1.0
+  file_picker: ^11.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.0
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/app_icon.png"
 
 flutter:
   uses-material-design: true
